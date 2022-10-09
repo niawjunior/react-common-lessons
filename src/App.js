@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useMemo, useReducer, useState } from "react";
 import { Link, Routes, Route } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { ACTION_TYPES } from "./actions/postActionTypes";
@@ -7,21 +7,25 @@ import { INITIAL_STATE, postReducer } from "./reducers/postReducer";
 const Main = () => {
   return (
     <>
+      <h4>useState</h4>
       <p>
-        <h4>useState</h4>
         <Link to="/ex1">Ex1</Link>
       </p>
+      <h4>AbortController</h4>
       <p>
-        <h4>AbortController</h4>
         <Link to="/ex2/1">Ex2</Link>
       </p>
+      <h4>useState (Object)</h4>
       <p>
-        <h4>useState (Object)</h4>
         <Link to="/ex3">Ex3</Link>
       </p>
+      <h4>useReducer</h4>
       <p>
-        <h4>useReducer</h4>
         <Link to="/ex4">Ex4</Link>
+      </p>
+      <h4>useMemo</h4>
+      <p>
+        <Link to="/ex5">Ex5</Link>
       </p>
     </>
   );
@@ -133,6 +137,42 @@ const Ex4 = () => {
   );
 };
 
+const Ex5 = () => {
+  const [text, setText] = useState("");
+  const [number, setNumber] = useState("");
+
+  const expensiveFunction = (n) => {
+    let total = 0;
+    for (let i = 1; i < n; i++) {
+      total += 1;
+    }
+    return total;
+  };
+
+  const sum = useMemo(() => expensiveFunction(number), [number]);
+  console.log("Component re-rendered");
+  return (
+    <>
+      <p>
+        text:
+        {text}
+      </p>
+      <p>
+        <input
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Enter a text"
+        />
+      </p>
+      <input
+        onChange={(e) => setNumber(e.target.value)}
+        placeholder="Enter a number"
+        type="number"
+      />
+      <p>Total: {sum}</p>
+    </>
+  );
+};
+
 function App() {
   return (
     <Routes>
@@ -140,6 +180,7 @@ function App() {
       <Route path="/ex2/:userId" element={<Ex2 />} />
       <Route path="/ex3" element={<Ex3 />} />
       <Route path="/ex4" element={<Ex4 />} />
+      <Route path="/ex5" element={<Ex5 />} />
       <Route path="/" element={<Main />} />
     </Routes>
   );
