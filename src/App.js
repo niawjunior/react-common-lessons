@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { Link, Routes, Route } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { ACTION_TYPES } from "./actions/postActionTypes";
@@ -26,6 +26,10 @@ const Main = () => {
       <h4>useMemo</h4>
       <p>
         <Link to="/ex5">Ex5</Link>
+      </p>
+      <h4>useCallback</h4>
+      <p>
+        <Link to="/ex6">Ex6</Link>
       </p>
     </>
   );
@@ -173,6 +177,19 @@ const Ex5 = () => {
   );
 };
 
+const Ex6 = () => {
+  const [numbers, setNumbers] = useState([]);
+  const addOne = useCallback(() => {
+    setNumbers((current) => [...current, current.length + 1]);
+  }, []);
+  return (
+    <>
+      <p>Numbers: {JSON.stringify(numbers)}</p>
+      <button onClick={addOne}>add one</button>
+    </>
+  );
+};
+
 function App() {
   return (
     <Routes>
@@ -181,6 +198,7 @@ function App() {
       <Route path="/ex3" element={<Ex3 />} />
       <Route path="/ex4" element={<Ex4 />} />
       <Route path="/ex5" element={<Ex5 />} />
+      <Route path="/ex6" element={<Ex6 />} />
       <Route path="/" element={<Main />} />
     </Routes>
   );
